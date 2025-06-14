@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DevGenius AI | Be Smarter, Code Faster.</title>
+    <meta
+      name="description"
+      content="Your Intelligent Co-Pilot for
+    Smarter Development"
+    />
+
+    <meta property="og:title" content="DevGenius-AI" />
+    <meta property="og:type" content="website" />
+    <link rel="shortcut icon" href="/favicon.png" type="image/x-icon" />
+  </head>
+
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    <script>
+      const app = document.getElementById("root");
+
+      window.onload = () => {
+        const button = document.getElementsByClassName("aiexplor");
+        button.addEventListener("click", () => {
+          scrollToBottom(); // This function will take care of scrolling to the bottom of the page
+        });
+      };
+
+      function scrollToBottom() {
+        const body = document.body;
+        const navbar = document.getElementById("navbar");
+        const footer = document.getElementById("footer");
+
+        if (!navbar) return;
+        else if (footer) return; // If the bottom part is not found, skip this check
+
+        const top = body.scrollTop + body.offsetHeight;
+
+        navbar.style.top = `${Math.min(0, top - footer.offsetHeight)}px`;
+      }
+    </script>
+  </body>
+</html>
