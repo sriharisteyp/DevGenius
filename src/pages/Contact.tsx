@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Mail, Send } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import emailjs from "@emailjs/browser";
 
@@ -25,10 +25,19 @@ const Contact = () => {
       [e.target.name]: e.target.value,
     });
   };
+  // Initialize EmailJS
+  useEffect(() => {
+    emailjs.init("Tmg7xJLUVmJkkKtNv"); // Replace with your EmailJS public key
+  }, []);
 
+  const validateEmail = (email: string) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+  };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
   
+    // Validate required fields
     if (!formData.firstName || !formData.lastName || !formData.email || !formData.message) {
       toast({
         title: "Error",
@@ -37,32 +46,39 @@ const Contact = () => {
       });
       return;
     }
+
+    // Validate email format
+    if (!validateEmail(formData.email)) {
+      toast({
+        title: "Error",
+        description: "Please enter a valid email address.",
+        variant: "destructive",
+      });
+      return;
+    }
   
     setIsSubmitting(true);
   
-    try {
-      const serviceId = "service_qgrnojs"; // Replace with your EmailJS service ID
-      const templateId = "template_ldqyx9s"; // Replace with your EmailJS template ID
-      const publicKey = "Tmg7xJLUVmJkkKtNv"; // Replace with your EmailJS public key
-  
-      const templateParams = {
-        from_name: `${formData.firstName} ${formData.lastName}`,
-        from_email: formData.email,
-        to_email: "devgenius.ai@gmail.com", // Replace with recipient email
-        subject: formData.subject || "No Subject Provided",
-        message: formData.message,
+    try {      const templateParams = {
+        name: `${formData.firstName} ${formData.lastName}`,
+        email: formData.email,
+        subject: formData.subject || "Contact Form Submission",
+        message: formData.message
       };
   
-      console.log("Sending EmailJS Request:", templateParams);
-  
-      const response = await emailjs.send(serviceId, templateId, templateParams, publicKey);
-      console.log("Email sent successfully:", response);
+      const response = await emailjs.send(
+        "service_qgrnojs",
+        "template_ldqyx9s",
+        templateParams,
+        "Tmg7xJLUVmJkkKtNv"
+      );
   
       toast({
         title: "Message Sent!",
         description: "Thank you for your message. We'll get back to you soon!",
       });
   
+      // Clear form after successful submission
       setFormData({
         firstName: "",
         lastName: "",

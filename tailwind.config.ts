@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -88,11 +87,23 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'spin-reverse': {
+					'0%': { transform: 'rotate(0deg)' },
+					'100%': { transform: 'rotate(-360deg)' },
+				},
+				'ellipsis': {
+					'0%': { content: '"."' },
+					'33%': { content: '".."' },
+					'66%': { content: '"..."' },
+					'100%': { content: '"."' },
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'spin-reverse': 'spin-reverse 1s linear infinite',
+				'ellipsis': 'ellipsis 2s steps(4, jump-none) infinite',
 			}
 		}
 	},

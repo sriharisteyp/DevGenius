@@ -23,28 +23,27 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
-    <script>
-      const app = document.getElementById("root");
-
-      window.onload = () => {
-        const button = document.getElementsByClassName("aiexplor");
-        button.addEventListener("click", () => {
-          scrollToBottom(); // This function will take care of scrolling to the bottom of the page
-        });
-      };
-
-      function scrollToBottom() {
-        const body = document.body;
-        const navbar = document.getElementById("navbar");
-        const footer = document.getElementById("footer");
-
-        if (!navbar) return;
-        else if (footer) return; // If the bottom part is not found, skip this check
-
-        const top = body.scrollTop + body.offsetHeight;
-
-        navbar.style.top = `${Math.min(0, top - footer.offsetHeight)}px`;
-      }
+    <script type="application/javascript">
+      (function (w, d, s, o, f, js, fjs) {
+        w[o] =
+          w[o] ||
+          function () {
+            (w[o].q = w[o].q || []).push(arguments);
+          };
+        (js = d.createElement(s)), (fjs = d.getElementsByTagName(s)[0]);
+        js.id = o;
+        js.src = f;
+        js.async = 1;
+        js.referrerPolicy = "origin";
+        fjs.parentNode.insertBefore(js, fjs);
+      })(
+        window,
+        document,
+        "script",
+        "copilot",
+        "https://script.copilot.live/v1/copilot.min.js?tkn=cat-3gr48ppo"
+      );
+      copilot("init", {});
     </script>
   </body>
 </html>

@@ -3,13 +3,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Copy, Check, Loader2, Code, Bug, RefreshCw, FileText, Languages, Brain, BookOpen, Wrench, Globe, MessageCircleQuestion } from "lucide-react";
 import { callGeminiApi } from "@/utils/geminiApi";
 import { useToast } from "@/hooks/use-toast";
+import Loader from "@/components/ui/loader";
 
-const AITools = () => {
-  const [activeTool, setActiveTool] = useState("codeGen");
+const AITools = () => {  const [activeTool, setActiveTool] = useState("codeGen");
   const [prompt, setPrompt] = useState("");
   const [result, setResult] = useState("");
   const [isLoading, setIsLoading] = useState(false);
