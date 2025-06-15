@@ -109,6 +109,11 @@ const AITools = () => {
       systemPrompt: "You are a code question answer. Answer the question  based on the user's description. Include proper answers and follow best practices."
     }
   ];
+  const handleToolChange = (toolId: string) => {
+    setActiveTool(toolId);
+    setPrompt(""); // Clear the input
+    setResult(""); // Clear the output
+  };
 
   const currentTool = aiTools.find(tool => tool.id === activeTool) || aiTools[0];
 
@@ -118,51 +123,262 @@ const AITools = () => {
   
     const lines = text.split('\n');
     const formattedContent: JSX.Element[] = [];
+    let inCodeBlock = false;
+    let currentCodeBlock: string[] = [];
+    let currentLanguage = '';
+  
+    const processCodeBlock = () => {
+      if (currentCodeBlock.length > 0) {
+        formattedContent.push(
+          <div key={`code-${formattedContent.length}`} 
+               className="group"
+               style={{ 
+                 margin: '1rem 0',
+                 borderRadius: '0.75rem',
+                 overflow: 'hidden',
+                 border: '1px solid rgba(0,0,0,0.1)',
+                 boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
+               }}>            <div style={{
+              backgroundColor: 'rgba(0, 0, 0, 0.3)',
+              padding: '0.75rem 1rem',
+              color: '#e2e8f0',
+              fontSize: '0.875rem',
+              fontFamily: 'monospace',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              borderBottom: '1px solid rgba(255,255,255,0.1)'
+            }}>
+              <span style={{ 
+                textTransform: 'capitalize',
+                color: '#94a3b8'
+              }}>{currentLanguage || 'code'}</span>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  navigator.clipboard.writeText(currentCodeBlock.join('\n'));
+                  toast({
+                    title: "Code copied to clipboard",
+                    description: "You can now paste it anywhere",
+                    duration: 2000,
+                  });
+                }}
+                className="opacity-0 group-hover:opacity-100 transition-opacity"
+                style={{
+                  color: '#94a3b8',
+                  backgroundColor: 'transparent',
+                  border: '1px solid rgba(148, 163, 184, 0.2)',
+                }}
+              >
+                <Copy className="h-4 w-4 mr-1" />
+                Copy code
+              </Button>
+            </div>
+            <pre style={{ 
+              backgroundColor: 'rgba(0, 0, 0, 0.2)',
+              padding: '1rem',
+              margin: 0,
+              overflow: 'auto',
+              color: '#e2e8f0',
+              fontSize: '0.875rem',
+              lineHeight: '1.6'
+            }}>
+              <code style={{ 
+                fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                whiteSpace: 'pre'
+              }}>
+                {currentCodeBlock.join('\n').split('\n').map((line, i) => {
+                  // Add syntax highlighting colors
+                  return line
+                    .replace(/(\/\*.*?\*\/|\/\/.*)/g, '<span style="color: #94a3b8">$1</span>') // Comments
+                    .replace(/(".*?"|'.*?'|`.*?`)/g, '<span style="color: #fbbf24">$1</span>') // Strings
+                    .replace(/\b(const|let|var|function|class|if|else|return|import|export|from)\b/g, '<span style="color: #ec4899">$1</span>') // Keywords
+                    .replace(/\b(true|false|null|undefined|this)\b/g, '<span style="color: #f472b6">$1</span>') // Special values
+                    .replace(/\b(\d+)\b/g, '<span style="color: #22d3ee">$1</span>'); // Numbers
+                }).join('\n')}
+              </code>
+            </pre>
+          </div>
+        );
+        currentCodeBlock = [];
+        currentLanguage = '';
+      }
+    };
   
     lines.forEach((line, index) => {
       const key = `line-${index}`;
   
-      if (line.match(/^\*\*.*\*\*:?$/)) {
-        const headerText = line.replace(/\*\*/g, '').replace(/:$/, '');
-        formattedContent.push(<h3 key={key} style={{ fontWeight: 'bold', fontSize: '1.25rem', margin: '1rem 0' }}>{headerText}</h3>);
-      } else if (line.includes('**') && line.trim() !== '') {
-        const parts = line.split('**');
-        const formattedLine = parts.map((part, partIndex) => partIndex % 2 === 1 ? <strong key={partIndex}>{part}</strong> : part);
-        formattedContent.push(<p key={key} style={{ margin: '0.5rem 0' }}>{formattedLine}</p>);
-      } else if (line.match(/^\s*\*\s+/)) {
-        const bulletText = line.replace(/^\s*\*\s+/, '');
+      if (line.startsWith('```')) {
+        if (inCodeBlock) {
+          processCodeBlock();
+          inCodeBlock = false;
+        } else {
+          inCodeBlock = true;
+          currentLanguage = line.slice(3).trim();
+        }
+        return;
+      }
+  
+      if (inCodeBlock) {
+        currentCodeBlock.push(line);
+        return;
+      }
+
+      // Handle headers
+      if (line.match(/^[A-Z][\w\s]+:?$/)) {
         formattedContent.push(
-          <div key={key} style={{ display: 'flex', alignItems: 'flex-start', margin: '0.5rem 0' }}>
-            <span style={{ marginRight: '0.5rem' }}>•</span>
-            <span>{bulletText}</span>
+          <h2 key={key} style={{ 
+            color: '#f1f5f9',
+            fontSize: '1.5rem',
+            fontWeight: 700,
+            marginTop: '2rem',
+            marginBottom: '1rem',
+            borderBottom: '1px solid rgba(255,255,255,0.1)',
+            paddingBottom: '0.5rem'
+          }}>
+            {line.replace(/:$/, '')}
+          </h2>
+        );
+      }
+      // Handle sub-headers
+      else if (line.match(/^\d+\.\s+.*:$/)) {
+        formattedContent.push(
+          <h3 key={key} style={{ 
+            color: '#f1f5f9',
+            fontSize: '1.25rem',
+            fontWeight: 600,
+            marginTop: '1.5rem',
+            marginBottom: '0.75rem'
+          }}>
+            {line}
+          </h3>
+        );
+      }
+      // Handle bullet points
+      else if (line.match(/^\*\s+/)) {
+        const bulletText = line.replace(/^\*\s+/, '');
+        const parts = bulletText.split(/(\*\*.*?\*\*)/g);
+        const formattedBullet = parts.map((part, idx) => {
+          if (part.startsWith('**') && part.endsWith('**')) {
+            return <strong key={idx} style={{ color: '#f1f5f9', fontWeight: 600 }}>{part.slice(2, -2)}</strong>;
+          }
+          return <span key={idx} style={{ color: '#f1f5f9' }}>{part}</span>;
+        });
+
+        formattedContent.push(
+          <div key={key} 
+               style={{ 
+                 display: 'flex', 
+                 alignItems: 'flex-start', 
+                 margin: '0.5rem 0 0.5rem 1rem',
+                 color: '#f1f5f9',
+                 fontSize: '1rem',
+                 lineHeight: '1.75'
+               }}>
+            <span style={{ 
+              marginRight: '0.75rem', 
+              color: '#94a3b8',
+              fontSize: '1.25rem',
+              lineHeight: '1.25'
+            }}>•</span>
+            <span style={{ flex: 1 }}>{formattedBullet}</span>
           </div>
         );
-      } else if (line.match(/^\s*\d+\.\s+/)) {
-        const listText = line.replace(/^\s*\d+\.\s+/, '');
-        const number = line.match(/^\s*(\d+)\./)?.[1] || '1';
+      }
+      // Handle regular text with bold sections
+      else if (line.trim() !== '') {
+        const parts = line.split(/(\*\*.*?\*\*)/g);
+        const formattedLine = parts.map((part, idx) => {
+          if (part.startsWith('**') && part.endsWith('**')) {
+            return (
+              <strong key={idx} style={{ 
+                color: '#f1f5f9',
+                fontWeight: 600
+              }}>
+                {part.slice(2, -2)}
+              </strong>
+            );
+          }
+          return <span key={idx} style={{ color: '#f1f5f9' }}>{part}</span>;
+        });
+
         formattedContent.push(
-          <div key={key} style={{ display: 'flex', alignItems: 'flex-start', margin: '0.5rem 0' }}>
-            <span style={{ marginRight: '0.5rem' }}>{number}.</span>
-            <span>{listText}</span>
-          </div>
+          <p key={key} style={{ 
+            margin: '0.75rem 0',
+            color: '#f1f5f9',
+            fontSize: '1rem',
+            lineHeight: '1.75'
+          }}>
+            {formattedLine}
+          </p>
         );
-      } else if (line.includes('http')) {
-        const urlRegex = /(https?:\/\/[^\s\]]+)/g;
-        const parts = line.split(urlRegex);
-        const formattedLine = parts.map((part, partIndex) => 
-          part.match(urlRegex) ? (
-            <a key={partIndex} href={part} target="_blank" rel="noopener noreferrer" style={{ color: '#0077cc', textDecoration: 'underline' }}>
-              {part}
-            </a>
-          ) : part
-        );
-        formattedContent.push(<p key={key} style={{ margin: '0.5rem 0' }}>{formattedLine}</p>);
-      } else if (line.trim() !== '') {
-        formattedContent.push(<p key={key} style={{ margin: '0.5rem 0' }}>{line}</p>);
       }
     });
   
-    return <div>{formattedContent}</div>;
+    processCodeBlock();
+    return (
+      <div className="ai-output" style={{
+        maxWidth: '100%',
+        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+        padding: '1.5rem',
+        backgroundColor: 'rgba(0, 0, 0, 0.2)',
+        borderRadius: '0.75rem',
+        border: '1px solid rgba(255,255,255,0.1)',
+        boxShadow: '0 0 15px rgba(0,0,0,0.1)',
+        margin: '1rem 0',
+        backdropFilter: 'blur(10px)',
+        color: '#f1f5f9',
+        minHeight: '300px',
+        maxHeight: '800px',
+        overflowY: 'auto',
+        msOverflowStyle: 'none',
+        scrollbarWidth: 'none',
+        '&::-webkit-scrollbar': {
+          display: 'none'
+        }
+      }}>
+        {formattedContent}
+        <div style={{
+          position: 'sticky',
+          bottom: '1rem',
+          display: 'flex',
+          justifyContent: 'center',
+          marginTop: '2rem'
+        }}>
+          <Button
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            className="glass-effect"
+            style={{
+              backgroundColor: 'rgba(0, 0, 0, 0.3)',
+              color: '#f1f5f9',
+              border: '1px solid rgba(255,255,255,0.1)',
+              padding: '0.5rem 1rem',
+              borderRadius: '0.5rem',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              transition: 'all 0.2s',
+              backdropFilter: 'blur(10px)'
+            }}
+          >
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="m18 15-6-6-6 6"/>
+            </svg>
+            Back to Top
+          </Button>
+        </div>
+      </div>
+    );
   };
   
 
@@ -217,8 +433,13 @@ const AITools = () => {
     }
   };
 
-  return (
-    <div className="min-h-screen pt-16">
+  return (    <div className="min-h-screen pt-16" style={{
+        msOverflowStyle: 'none',
+        scrollbarWidth: 'none',
+        '&::-webkit-scrollbar': {
+          display: 'none'
+        }
+      }}>
       <Navigation />
 
       <div className="max-w-7xl mx-auto px-4 py-12">
@@ -243,7 +464,7 @@ const AITools = () => {
                   className={`cursor-pointer transition-all duration-300 glass-effect hover:border-${tool.color}-500/50 ${
                     activeTool === tool.id ? `border-${tool.color}-500 bg-${tool.color}-500/10` : ''
                   }`}
-                  onClick={() => setActiveTool(tool.id)}
+                  onClick={() => handleToolChange(tool.id)}
                 >
                   <CardContent className="p-4 text-center">
                     <div className={`w-10 h-10 rounded-lg bg-${tool.color}-500/20 flex items-center justify-center mx-auto mb-2`}>
@@ -269,65 +490,148 @@ const AITools = () => {
               <p className="text-gray-400">{currentTool.description}</p>
             </CardHeader>
             <CardContent className="space-y-6">
-              {/* Input */}
-              <div>
-                <label className="text-gray-300 text-sm font-medium mb-2 block">Input:</label>
-                <Textarea
+              {/* Input Section */}
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <label className="text-gray-300 text-sm font-medium">
+                    <div className="flex items-center gap-2">
+                      <Code className="w-4 h-4" />
+                      Input Query
+                    </div>
+                  </label>
+                  <div className="flex items-center gap-2">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="glass-effect border-gray-600 text-gray-400 hover:bg-gray-500/10"
+                      onClick={() => setPrompt("")}
+                    >
+                      Clear
+                    </Button>
+                  </div>
+                </div>                <Textarea
                   placeholder={currentTool.placeholder}
-                  className="glass-effect border-gray-600 text-white placeholder-gray-400 min-h-[120px]"
+                  className="glass-effect border-gray-600 text-white placeholder-gray-400 font-mono text-sm"
                   value={prompt}
                   onChange={(e) => setPrompt(e.target.value)}
+                  style={{ 
+                    lineHeight: '1.5',
+                    padding: '1rem',
+                    backgroundColor: 'rgba(0, 0, 0, 0.2)',
+                    minHeight: '200px',
+                    maxHeight: '400px',
+                    height: 'auto',
+                    resize: 'vertical',
+                    msOverflowStyle: 'none',
+                    scrollbarWidth: 'none',
+                    '&::-webkit-scrollbar': {
+                      display: 'none'
+                    }
+                  }}
                 />
+                <div className="flex items-center justify-between text-xs text-gray-400">
+                  <span>Use Markdown for formatting. Wrap code in ```language blocks.</span>
+                  <span>{prompt.length} characters</span>
+                </div>
               </div>
 
               {/* Generate Button */}
               <Button 
-                className="w-full bg-green-600 hover:bg-green-700 text-white py-3 glow-effect"
+                className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white py-3 shadow-lg transition-all duration-200 hover:shadow-green-500/20"
                 onClick={handleGenerate}
                 disabled={isLoading}
               >
                 {isLoading ? (
                   <>
                     <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Generating...
+                    Processing Request...
                   </>
                 ) : (
                   <>
-                    ✨ Generate with AI
+                    <Code className="w-4 h-4 mr-2" />
+                    Generate Response
                   </>
                 )}
               </Button>
 
-              {/* Output */}
+              {/* Output Section */}
               {(result || isLoading) && (
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <label className="text-gray-300 text-sm font-medium">AI Output:</label>
-                    {result && (
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        className="glass-effect border-blue-500 text-blue-400 hover:bg-blue-500/10"
-                        onClick={handleCopy}
-                        disabled={isCopied}
-                      >
-                        {isCopied ? <Check className="w-4 h-4 mr-2" /> : <Copy className="w-4 h-4 mr-2" />}
-                        {isCopied ? "Copied!" : "Copy"}
-                      </Button>
-                    )}
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <label className="text-gray-300 text-sm font-medium flex items-center gap-2">
+                        <FileText className="w-4 h-4" />
+                        Generated Output
+                      </label>
+                      {result && !isLoading && (
+                        <span className="text-xs text-gray-500 px-2 py-1 rounded-full bg-gray-800/50">
+                          {result.split('\n').length} lines
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      {result && (
+                        <>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="glass-effect border-blue-500 text-blue-400 hover:bg-blue-500/10 flex items-center gap-2"
+                            onClick={handleCopy}
+                            disabled={isCopied}
+                          >
+                            {isCopied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                            {isCopied ? "Copied!" : "Copy All"}
+                          </Button>
+                        </>
+                      )}
+                    </div>
                   </div>
-                  <div className="bg-black border border-gray-700 rounded-lg p-6 max-h-96 overflow-y-auto">
+                  <div className="bg-gray-900/50 backdrop-blur-sm border border-gray-800 rounded-lg overflow-hidden">
                     {isLoading ? (
                       <div className="flex items-center justify-center py-8">
-                        <Loader2 className="w-6 h-6 animate-spin text-green-400" />
-                        <span className="ml-2 text-gray-400">AI is working...</span>
+                        <div className="flex flex-col items-center gap-3">
+                          <Loader2 className="w-6 h-6 animate-spin text-green-400" />
+                          <span className="text-gray-400 text-sm">Processing your request...</span>
+                        </div>
                       </div>
                     ) : (
-                      <div className="text-gray-300 text-sm">
-                        {formatAIOutput(result)}
+                      <div className="text-gray-300 text-sm divide-y divide-gray-800">
+                        <div className="p-4 bg-gray-800/30">
+                          <div className="flex items-center gap-2 text-xs text-gray-400">
+                            <Code className="w-4 h-4" />
+                            <span>Response from {currentTool.name}</span>
+                          </div>
+                        </div>
+                        <div className="p-6 overflow-x-auto">
+                          {formatAIOutput(result)}
+                        </div>
                       </div>
                     )}
                   </div>
+                </div>
+              )}
+
+              {/* Quick Tips */}
+              {!result && !isLoading && (
+                <div className="border border-gray-800 rounded-lg p-4 bg-gray-900/30">
+                  <h4 className="text-gray-300 text-sm font-medium mb-3 flex items-center gap-2">
+                    <MessageCircleQuestion className="w-4 h-4" />
+                    Pro Tips
+                  </h4>
+                  <ul className="space-y-2 text-gray-400 text-sm">
+                    <li className="flex items-start gap-2">
+                      <span>•</span>
+                      <span>Use clear, specific descriptions for better results</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span>•</span>
+                      <span>For code examples, specify the language and framework version</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span>•</span>
+                      <span>Include relevant context like OS, environment, or dependencies</span>
+                    </li>
+                  </ul>
                 </div>
               )}
             </CardContent>
