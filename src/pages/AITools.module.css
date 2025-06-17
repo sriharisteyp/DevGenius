@@ -1,0 +1,40 @@
+.scrollableContent {
+  backdrop-filter: blur(10px);
+  color: #f1f5f9;
+  min-height: 300px;
+  max-height: 800px;
+  overflow-y: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollableContent::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollToTopContainer {
+  position: sticky;
+  bottom: 1rem;
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.noScrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.noScrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.codeDisplay {
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  white-space: pre-wrap;
+  font-family: monospace;
+  max-height: 400px;
+  overflow-y: auto;
+}

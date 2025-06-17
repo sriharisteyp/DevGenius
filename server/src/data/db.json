@@ -1,0 +1,12 @@
+{
+  "users": [
+    {
+      "id": "1750163684619",
+      "username": "testuser",
+      "email": "testus1e1r@gmai.com",
+      "password": "$2a$10$Bbryb.m6.vFmiaTbnjYbCO9PKCGfF65OFU5QFj5f6rlYjBUvpiy.S",
+      "createdAt": "2025-06-17T12:34:44.619Z",
+      "updatedAt": "2025-06-17T12:34:44.619Z"
+    }
+  ]
+}
