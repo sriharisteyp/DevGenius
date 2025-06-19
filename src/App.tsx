@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { StrictMode } from "react";
 import { LoadingProvider } from "@/components/LoadingProvider";
 import { AuthProvider } from "@/components/AuthProvider";
+import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import AITools from "./pages/AITools";
@@ -27,31 +28,33 @@ const App = () => {
     <StrictMode>
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
-          <TooltipProvider>
-            <AuthProvider>
-              <LoadingProvider>
-                <div className="min-h-screen">
-                  <Routes>
-                    <Route path="/" element={<Index />} />
-                    <Route path="/ai-tools" element={<AITools />} />
-                    <Route path="/use-cases" element={<UseCases />} />
-                    <Route path="/resources" element={<Resources />} />
-                    <Route path="/about" element={<About />} />
-                    <Route path="/contact" element={<Contact />} />
-                    <Route path="/pricing" element={<Pricing />} />
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/register" element={<Register />} />
-                    <Route path="/privacy" element={<Privacy />} />
-                    <Route path="/terms" element={<Terms />} />
-                    <Route path="*" element={<NotFound />} />
-                  </Routes>
-                  <Toaster />
-                  <Sonner />
-                  <Footer />
-                </div>
-              </LoadingProvider>
-            </AuthProvider>
-          </TooltipProvider>
+          <TooltipPrimitive.Provider>
+            <TooltipProvider>
+              <AuthProvider>
+                <LoadingProvider>
+                  <div className="min-h-screen">
+                    <Routes>
+                      <Route path="/" element={<Index />} />
+                      <Route path="/ai-tools" element={<AITools />} />
+                      <Route path="/use-cases" element={<UseCases />} />
+                      <Route path="/resources" element={<Resources />} />
+                      <Route path="/about" element={<About />} />
+                      <Route path="/contact" element={<Contact />} />
+                      <Route path="/pricing" element={<Pricing />} />
+                      <Route path="/login" element={<Login />} />
+                      <Route path="/register" element={<Register />} />
+                      <Route path="/privacy" element={<Privacy />} />
+                      <Route path="/terms" element={<Terms />} />
+                      <Route path="*" element={<NotFound />} />
+                    </Routes>
+                    <Toaster />
+                    <Sonner />
+                    <Footer />
+                  </div>
+                </LoadingProvider>
+              </AuthProvider>
+            </TooltipProvider>
+          </TooltipPrimitive.Provider>
         </BrowserRouter>
       </QueryClientProvider>
     </StrictMode>

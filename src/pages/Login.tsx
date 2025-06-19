@@ -1,14 +1,10 @@
-
 import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
-import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/hooks/useAuth";
-import { Crown, Star, Zap, Save, History, Settings, User, Mail, Lock } from "lucide-react";
 
 const Login = () => {
   const location = useLocation();
@@ -22,14 +18,7 @@ const Login = () => {
   );
   const { user, signIn, signOut } = useAuth();
 
-  const premiumFeatures = [
-    { icon: Crown, title: "Secure API Keys", description: "Encrypted storage for your AI service API keys" },
-    { icon: Star, title: "Generation History", description: "Access your complete AI generation history" },
-    { icon: Save, title: "Save & Export", description: "Save your generated code and export projects" },
-    { icon: History, title: "Smart Templates", description: "Create and reuse custom prompt templates" },
-    { icon: Settings, title: "Advanced Settings", description: "Fine-tune AI parameters for better results" },
-    { icon: Zap, title: "Multi-Model Support", description: "Switch between different AI models seamlessly" },
-  ]; const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const trimmedEmail = email.trim();
@@ -55,123 +44,20 @@ const Login = () => {
     }
   };
 
-  if (user) {
-    return (
-      <div className="min-h-screen pt-16">
-        <Navigation />
-
-        <div className="max-w-4xl mx-auto px-4 py-12">
-          <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold text-white mb-4">
-              Welcome back, <span className="gradient-text">{user.username || 'Developer'}!</span>
-            </h1>
-            <p className="text-xl text-gray-300">
-              Your AI development workspace is ready
-            </p>
-          </div>
-
-          {/* User Info Card */}
-          <Card className="glass-effect border-green-500/30 mb-8">
-            <CardHeader>
-              <CardTitle className="text-white flex items-center gap-3">
-                <User className="w-6 h-6" />
-                Account Information
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid md:grid-cols-2 gap-4">
-                <div className="flex items-center gap-3">
-                  <Mail className="w-5 h-5 text-green-400" />
-                  <div>
-                    <p className="text-sm text-gray-400">Email</p>
-                    <p className="text-white">{user.email}</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  <Crown className="w-5 h-5 text-green-400" />
-                  <div>
-                    <p className="text-sm text-gray-400">Plan</p>
-                    <Badge className="bg-green-500/20 text-green-400">Premium</Badge>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Features Grid */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-            {premiumFeatures.map((feature, index) => {
-              const IconComponent = feature.icon;
-              return (
-                <Card key={index} className="glass-effect border-green-500/30 hover:border-green-500/50 transition-all">
-                  <CardHeader className="pb-3">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center">
-                        <IconComponent className="w-5 h-5 text-green-400" />
-                      </div>
-                      <div>
-                        <CardTitle className="text-white text-lg">{feature.title}</CardTitle>
-                        <Badge variant="secondary" className="bg-green-500/20 text-green-400 text-xs">
-                          Active
-                        </Badge>
-                      </div>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-gray-400 text-sm">{feature.description}</p>
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
-
-          {/* Quick Actions */}
-          <Card className="glass-effect border-green-500/30">
-            <CardHeader>
-              <CardTitle className="text-white">Quick Actions</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid md:grid-cols-4 gap-4">
-                <Link to="/ai-tools">
-                  <Button className="w-full bg-green-600 hover:bg-green-700 text-white">
-                    🚀 Start Coding
-                  </Button>
-                </Link>
-                <Button variant="outline" className="glass-effect border-gray-600 hover:border-green-500 text-white">
-                  📝 My Templates
-                </Button>
-                <Button variant="outline" className="glass-effect border-gray-600 hover:border-green-500 text-white">
-                  📊 Usage Stats
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={signOut}
-                  className="glass-effect border-gray-600 hover:border-red-500 text-white"
-                >
-                  🚪 Sign Out
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen pt-16">
       <Navigation />
 
       <div className="max-w-md mx-auto px-4 py-12">
-        <Card className="glass-effect border-green-500/30">          <CardHeader className="text-center">
-          <CardTitle className="text-white text-2xl">
-            Welcome Back
-          </CardTitle>
-          <p className="text-gray-400">
-            Sign in to access your AI development tools
-          </p>
-        </CardHeader>
+        <Card className="glass-effect border-green-500/30">
+          <CardHeader className="text-center">
+            <CardTitle className="text-white text-2xl">
+              Welcome Back
+            </CardTitle>
+            <p className="text-gray-400">
+              Sign in to access your AI development tools
+            </p>
+          </CardHeader>
 
           <CardContent className="space-y-6">
             {/* Benefits Preview */}
@@ -183,7 +69,9 @@ const Login = () => {
                 <li>• Custom templates & presets</li>
                 <li>• Advanced AI model access</li>
               </ul>
-            </div>            {successMessage && (
+            </div>
+
+            {successMessage && (
               <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-3">
                 <p className="text-green-400 text-sm">{successMessage}</p>
               </div>
@@ -237,7 +125,8 @@ const Login = () => {
               <Link
                 to="/register"
                 className="text-green-400 hover:text-green-300"
-              >                Sign up
+              >
+                Sign up
               </Link>
             </div>
           </CardContent>

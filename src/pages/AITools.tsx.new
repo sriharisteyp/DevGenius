@@ -31,30 +31,8 @@ import {
 import { callGeminiApi } from "@/utils/geminiApi";
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import ReactMarkdown from 'react-markdown';
 
-const MONTHLY_CREDIT_LIMIT = 15; // Monthly credit limit per user
-
-const formatOutput = (text: string): string => {
-  // Replace markdown-style code blocks with HTML-style formatting
-  let formatted = text.replace(/```(\w+)?\n([\s\S]*?)```/g, (_, lang, code) => {
-    return `<pre class="bg-gray-800 p-4 rounded-lg overflow-x-auto"><code class="language-${lang || 'text'}">${code.trim()}</code></pre>`;
-  });
-
-  // Replace bold text
-  formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-
-  // Replace italic text
-  formatted = formatted.replace(/\*(.*?)\*/g, '<em>$1</em>');
-
-  // Replace inline code
-  formatted = formatted.replace(/`([^`]+)`/g, '<code class="bg-gray-800 px-1 rounded">$1</code>');
-
-  // Add line breaks
-  formatted = formatted.replace(/\n/g, '<br/>');
-
-  return formatted;
-};
+const MONTHLY_CREDIT_LIMIT = 150; // Monthly credit limit per user
 
 const AITools = () => {
   const navigate = useNavigate();
@@ -222,95 +200,12 @@ const AITools = () => {
       color: "purple",
       placeholder: "Paste your code or describe what you need documentation for",
       systemPrompt: "You are a documentation generator. Create comprehensive, clear documentation including usage examples, parameters, and explanations."
-    },
-    {
-      id: "translator",
-      name: "Language Translator",
-      icon: Languages,
-      description: "Convert code between programming languages",
-      color: "orange",
-      placeholder: "Paste code and specify target language (e.g., 'Convert this JavaScript to Python')",
-      systemPrompt: "You are a programming language translator. Convert code from one programming language to another while maintaining functionality and best practices."
-    },
-    {
-      id: "explainer",
-      name: "Code Explainer",
-      icon: Brain,
-      description: "Get detailed explanations of complex code",
-      color: "cyan",
-      placeholder: "Paste the code you want explained in detail",
-      systemPrompt: "You are a code explainer. Provide detailed, easy-to-understand explanations of code, including what each part does and why."
-    },
-    {
-      id: "learningPath",
-      name: "Learning Path",
-      icon: BookOpen,
-      description: "Get personalized learning recommendations",
-      color: "pink",
-      placeholder: "Describe your current skill level and what you want to learn",
-      systemPrompt: "You are a learning advisor. Create personalized learning paths with resources, steps, and timelines based on the user's goals and current level."
-    },
-    {
-      id: "framework",
-      name: "Framework Recommender",
-      icon: Wrench,
-      description: "Get suggestions for tools and frameworks",
-      color: "indigo",
-      placeholder: "Describe your project requirements and goals",
-      systemPrompt: "You are a framework and tool advisor. Recommend the best frameworks, libraries, and tools based on project requirements and constraints."
-    },
-    {
-      id: "websites",
-      name: "Web Resources",
-      icon: Globe,
-      description: "Find relevant websites and resources",
-      color: "teal",
-      placeholder: "What kind of resources or websites are you looking for?",
-      systemPrompt: "You are a web resource finder. Recommend relevant websites, tutorials, documentation, and online resources based on the user's needs."
-    },
-    {
-      id: "question",
-      name: "Ask Questions about Coding",
-      icon: MessageCircle,
-      description: "Generate answers for your questions",
-      color: "violet",
-      placeholder: "Ask your question about coding (e.g., 'How to add real-time chatting')",
-      systemPrompt: "You are a coding question answer. Answer the question based on the user's description. Include proper answers and follow best practices."
-    },
-    
-    {
-      id: "codeOptimizer",
-      name: "Code Optimizer",
-      icon: Bolt,
-      description: "Optimize code for better performance",
-      color: "gold",
-      placeholder: "Paste your code to optimize its performance",
-      systemPrompt: "You are a code optimizer. Enhance the provided code for maximum performance and minimal resource consumption."
-    },
-    {
-      id: "regexHelper",
-      name: "Regex Helper",
-      icon: Filter,
-      description: "Generate or debug regular expressions",
-      color: "magenta",
-      placeholder: "Describe your regex needs or paste a regex for debugging",
-      systemPrompt: "You are a regex expert. Create, debug, or explain regular expressions based on the user's needs."
-    },
+    }
   ];
 
   return (
     <div className="min-h-screen bg-background pt-16">
       <Navigation />
-      
-      {/* Title Section */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 text-center">
-        <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-blue-500 mb-4">
-          AI Development Tools
-        </h1>
-        <p className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto">
-          Powerful AI-powered tools to enhance your development workflow and boost productivity
-        </p>
-      </div>
       
       {/* Credits Display */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-6">
@@ -329,36 +224,9 @@ const AITools = () => {
               </div>
               <div className="w-1/2 h-2 bg-gray-700 rounded-full overflow-hidden">
                 <div 
-                  className={`h-full rounded-full transition-all duration-300 ${
-                    credits.used <= 7 
-                      ? 'bg-green-500' 
-                      : credits.used <= 10 
-                      ? 'bg-yellow-500' 
-                      : 'bg-red-500'
-                  }`}
+                  className="h-full bg-green-500 rounded-full transition-all duration-300"
                   style={{ width: `${(credits.used / credits.total) * 100}%` }}
                 />
-              </div>
-              <div className="flex items-center gap-4">
-                <div className="text-sm">
-                  {credits.used <= 7 ? (
-                    <span className="text-green-400">Good standing</span>
-                  ) : credits.used <= 10 ? (
-                    <span className="text-yellow-400">Credits running low</span>
-                  ) : (
-                    <span className="text-red-400">Critical: Almost out of credits</span>
-                  )}
-                </div>
-                {credits.used >= 10 && (
-                  <Button
-                    onClick={() => navigate('/pricing')}
-                    className="bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white"
-                    size="sm"
-                  >
-                    <Bolt className="w-4 h-4 mr-2" />
-                    Refill Credits
-                  </Button>
-                )}
               </div>
             </div>
           </CardContent>
@@ -440,12 +308,9 @@ const AITools = () => {
               )}
             </CardHeader>
             <CardContent>
-              <div 
-                className="min-h-[200px] p-4 bg-background/50 rounded-lg border border-gray-800 text-white font-mono overflow-auto prose prose-invert max-w-none"
-                dangerouslySetInnerHTML={{ 
-                  __html: result ? formatOutput(result) : "Generated content will appear here..." 
-                }}
-              />
+              <div className="min-h-[200px] p-4 bg-background/50 rounded-lg border border-gray-800 text-white font-mono whitespace-pre-wrap">
+                {result || "Generated content will appear here..."}
+              </div>
             </CardContent>
           </Card>
         </div>

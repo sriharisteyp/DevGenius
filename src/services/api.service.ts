@@ -6,7 +6,6 @@ interface RegisterPayload {
 
 interface VerifyPayload {
     email: string;
-    otp: string;
     username: string;
     password: string;
 }
@@ -20,7 +19,7 @@ const API_BASE_URL = 'http://localhost:3000';
 
 export const apiService = {
     register: async (payload: RegisterPayload) => {
-        const response = await fetch(`${API_BASE_URL}/auth/register`, {
+        const response = await fetch(`http://localhost:3000/api/auth/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -35,24 +34,8 @@ export const apiService = {
         return response.json();
     },
 
-    verify: async (payload: VerifyPayload) => {
-        const response = await fetch(`${API_BASE_URL}/auth/verify`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(payload),
-        });
-
-        if (!response.ok) {
-            throw new Error('OTP verification failed');
-        }
-
-        return response.json();
-    },
-
     login: async (payload: LoginPayload) => {
-        const response = await fetch(`${API_BASE_URL}/auth/login`, {
+        const response = await fetch(`http://localhost:3000/api/auth/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

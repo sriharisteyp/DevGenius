@@ -40,7 +40,7 @@ export const callGeminiApi = async (request: GeminiRequest): Promise<{ text: str
     }
 
     const data: GeminiResponse = await response.json();
-
+    
     if (!data.candidates?.[0]?.content?.parts?.[0]?.text) {
       throw new Error('Invalid response from Gemini API');
     }

@@ -11,7 +11,6 @@ export interface AuthContextType {
     pendingVerification: boolean;
     signIn: (email: string, password: string) => Promise<void>;
     signUp: (username: string, email: string, password: string) => Promise<void>;
-    verifyOTP: (email: string, otp: string, username: string, password: string) => Promise<void>;
     signOut: () => void;
 }
 
@@ -21,6 +20,5 @@ export const AuthContext = createContext<AuthContextType>({
     pendingVerification: false,
     signIn: async () => { },
     signUp: async () => { },
-    verifyOTP: async () => { },
     signOut: () => { },
 });

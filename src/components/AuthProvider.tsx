@@ -1,20 +1,30 @@
 import { ReactNode, useEffect, useState } from 'react';
-import { AuthContext, User } from '@/contexts/AuthContext';
+import { AuthContext } from '@/contexts/AuthContext';
 import AuthService from '@/services/auth.service';
 
 interface AuthProviderProps {
   children: ReactNode;
 }
 
+export interface User {
+  id: string;
+  username: string;
+  email: string;
+}
+
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    // Check for stored user data on mount
+    // Check for stored user data and token on mount
     const storedUser = localStorage.getItem('user');
-    if (storedUser) {
+    const token = localStorage.getItem('token');
+
+    if (storedUser && token) {
       setUser(JSON.parse(storedUser));
+      setIsAuthenticated(true);
     }
     setLoading(false);
   }, []);
@@ -23,7 +33,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     try {
       const response = await AuthService.login(email, password);
       setUser(response.user);
+      setIsAuthenticated(true);
       localStorage.setItem('user', JSON.stringify(response.user));
+      localStorage.setItem('token', response.token);
       return response;
     } catch (error) {
       console.error('Sign in error:', error);
@@ -35,7 +47,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     try {
       const response = await AuthService.register(username, email, password);
       setUser(response.user);
+      setIsAuthenticated(true);
       localStorage.setItem('user', JSON.stringify(response.user));
+      localStorage.setItem('token', response.token);
       return response;
     } catch (error) {
       console.error('Sign up error:', error);
@@ -46,19 +60,13 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const signOut = () => {
     AuthService.logout();
     setUser(null);
+    setIsAuthenticated(false);
     localStorage.removeItem('user');
-  };
-
-  const value = {
-    user,
-    loading,
-    signIn,
-    signUp,
-    signOut
+    localStorage.removeItem('token');
   };
 
   return (
-    <AuthContext.Provider value={value}>
+    <AuthContext.Provider value={{ user, loading, isAuthenticated, signIn, signUp, signOut }}>
       {children}
     </AuthContext.Provider>
   );

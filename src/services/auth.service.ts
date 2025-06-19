@@ -11,7 +11,7 @@ interface AuthResponse {
 }
 
 const authService = {
-    baseUrl: `${API_BASE_URL}/auth`,
+    baseUrl: `${API_BASE_URL}/api/auth`,
 
     getAuthHeaders() {
         const token = this.getToken();

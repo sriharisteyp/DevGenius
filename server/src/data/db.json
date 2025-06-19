@@ -1,4 +1,73 @@
 {
+  "messageUsage": {
+    "default": {
+      "count": 0,
+      "lastResetDate": "2025-06-19T00:00:00.000Z",
+      "plan": "free"
+    }
+  },
+  "transactions": [],
+  "plans": [
+    {
+      "id": "free",
+      "name": "Free",
+      "price": 0,
+      "priceId": "price_free",
+      "period": "forever",
+      "description": "Perfect for getting started with AI development tools",
+      "features": [
+        "5 AI requests per day",
+        "Basic code generation",
+        "Community support",
+        "Access to public tools",
+        "Basic documentation generation"
+      ],
+      "limitations": [
+        "Limited daily usage",
+        "No priority support"
+      ]
+    },
+    {
+      "id": "pro",
+      "name": "Pro",
+      "price": 1,
+      "priceId": "price_pro_monthly",
+      "period": "per month",
+      "description": "For professional developers and small teams",
+      "features": [
+        "500 AI requests per day",
+        "All AI tools access",
+        "Priority support",
+        "Advanced code generation",
+        "Custom templates",
+        "Export functionality",
+        "Integration support",
+        "Code quality analysis"
+      ],
+      "limitations": []
+    },
+    {
+      "id": "enterprise",
+      "name": "Enterprise",
+      "price": 999,
+      "priceId": "custom",
+      "period": "contact us",
+      "description": "For large teams and organizations",
+      "features": [
+        "Unlimited AI requests",
+        "Custom AI models",
+        "Dedicated support",
+        "On-premise deployment",
+        "Advanced analytics",
+        "Custom integrations",
+        "Team management",
+        "SLA guarantee",
+        "White-label options"
+      ],
+      "limitations": []
+    }
+  ],
+  "subscriptions": [],
   "users": [
     {
       "id": "1750163684619",
@@ -7,6 +76,46 @@
       "password": "$2a$10$Bbryb.m6.vFmiaTbnjYbCO9PKCGfF65OFU5QFj5f6rlYjBUvpiy.S",
       "createdAt": "2025-06-17T12:34:44.619Z",
       "updatedAt": "2025-06-17T12:34:44.619Z"
+    },
+    {
+      "id": "1750208153962",
+      "username": "Sri Hari",
+      "email": "testus1e1r@example.com",
+      "password": "$2a$10$pKRTZ3EkpfTRRlE4UWRnAOWPQD5kGIIcX2D6SNHp9jIgFnaFZFRWq",
+      "createdAt": "2025-06-18T00:55:53.963Z",
+      "updatedAt": "2025-06-18T00:55:53.963Z"
+    },
+    {
+      "id": "1750209158993",
+      "username": "Sri Hari",
+      "email": "cevig71803@example.com",
+      "password": "$2a$10$ZWw9.NOQoLOMdaMt2qExCehjAPbPLJX8rLc/ruxR9amwyL5wgvbSu",
+      "createdAt": "2025-06-18T01:12:38.993Z",
+      "updatedAt": "2025-06-18T01:12:38.993Z"
+    },
+    {
+      "id": "1750258706061",
+      "username": "Sri Hari",
+      "email": "cevig71803@gmail1.com",
+      "password": "$2a$10$WM6zyuTgMDgpFHkaYWNZ4ueOiVPPYdl7HXvmTzHwDYYbxCMJTmoUe",
+      "createdAt": "2025-06-18T14:58:26.061Z",
+      "updatedAt": "2025-06-18T14:58:26.061Z"
+    },
+    {
+      "id": "1750296775423",
+      "username": "Sri Hari",
+      "email": "cevig718031@gmail1.com",
+      "password": "$2a$10$mcS7hI862So.xlVkJvjov.W4ji8EH4OgPEksiv.kcX2aSFBW5MaOu",
+      "createdAt": "2025-06-19T01:32:55.425Z",
+      "updatedAt": "2025-06-19T01:32:55.425Z"
+    },
+    {
+      "id": "1750297560459",
+      "username": "example@exam1ple.com",
+      "email": "example@exam1ple.com",
+      "password": "$2a$10$vfmkjtcbbP.7w8n4uSIcQejNAa4VLuxf6bXsA1NTg608o0qk0Dh0y",
+      "createdAt": "2025-06-19T01:46:00.459Z",
+      "updatedAt": "2025-06-19T01:46:00.459Z"
     }
   ]
 }

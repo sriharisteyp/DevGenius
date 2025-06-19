@@ -55,6 +55,7 @@
     "lucide-react": "^0.462.0",
     "next-themes": "^0.3.0",
     "nodemailer": "^7.0.3",
+    "qrcode.react": "^4.2.0",
     "react": "^18.3.1",
     "react-day-picker": "^8.10.1",
     "react-dom": "^18.3.1",
@@ -72,7 +73,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
-    "@tailwindcss/typography": "^0.5.15",
+    "@tailwindcss/typography": "^0.5.16",
     "@types/node": "^22.5.5",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",

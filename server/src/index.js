@@ -6,14 +6,19 @@ dotenv.config();
 import express from 'express';
 import cors from 'cors';
 import authRoutes from './routes/auth.js';
+import planRoutes from './routes/planRoutes.js';
+import paymentRoutes from './routes/paymentRoutes.js';
+import aiRoutes from './routes/aiRoutes.js';
+import creditRoutes from './routes/creditRoutes.js';
 
 // Validate required environment variables
 if (!process.env.JWT_SECRET) {
-  console.error('JWT_SECRET environment variable is required!');
+  console.error('Required environment variables are missing!');
   process.exit(1);
 }
 
 const app = express();
+const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(cors({
@@ -26,7 +31,7 @@ app.use(express.json());
 
 // Request logging middleware
 app.use((req, res, next) => {
-  console.log(`${new Date().toISOString()} ${req.method} ${req.url}`);
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
   next();
 });
 
@@ -39,22 +44,20 @@ app.options('*', cors({
 }));
 
 // Routes
-app.use('/auth', authRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/plans', planRoutes);
+app.use('/api/payments', paymentRoutes);
+app.use('/api/ai', aiRoutes);
+app.use('/api/credits', creditRoutes);
+app.use('/api/credits', creditRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-  console.error('Error:', err);
-  res.status(500).json({ 
-    message: 'Internal server error',
-    error: err.message 
-  });
+  console.error(err.stack);
+  res.status(500).json({ error: 'Something went wrong!' });
 });
 
-const PORT = process.env.PORT || 3000;
-
+// Start server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
-  console.log('Available endpoints:');
-  console.log('  POST /auth/register - Register a new user');
-  console.log('  POST /auth/login - Login user');
 });
