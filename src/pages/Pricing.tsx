@@ -3,7 +3,7 @@ import Navigation from "@/components/Navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Check, Loader2 } from "lucide-react";
+import { Check } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { UPIPaymentDialog } from "@/components/UPIPaymentDialog";
 import pricingService, { Plan } from "@/services/pricing.service";
@@ -47,7 +47,6 @@ const Pricing = () => {
     }
 
     try {
-      // For free plan, create subscription directly
       if (plan.price === 0) {
         await pricingService.createSubscription(user.id, plan.id);
         toast({
@@ -57,13 +56,11 @@ const Pricing = () => {
         return;
       }
 
-      // For enterprise plan, redirect to contact
       if (plan.price === null) {
         window.location.href = "/contact";
         return;
       }
 
-      // For paid plans, open payment dialog
       setSelectedPlan(plan);
       setIsPaymentDialogOpen(true);
     } catch (err) {
@@ -121,7 +118,17 @@ const Pricing = () => {
   }
 
   return (
-    <div className="min-h-screen pt-16">
+    <div className="min-h-screen pt-16 relative">
+      {/* Transparent Blur Overlay */}
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
+        <div className="text-center">
+          <h1 className="text-5xl font-bold text-white mb-4">Coming Soon</h1>
+          <p className="text-xl text-gray-300 max-w-lg mx-auto">
+            We're working hard to bring you this feature. Stay tuned for updates!
+          </p>
+        </div>
+      </div>
+
       <Navigation />
 
       <div className="max-w-7xl mx-auto px-4 py-12">
@@ -229,32 +236,7 @@ const Pricing = () => {
             Frequently Asked Questions
           </h2>
           <div className="grid md:grid-cols-2 gap-6">
-            {[
-              {
-                q: "Can I change my plan anytime?",
-                a: "Yes, you can upgrade or downgrade your plan at any time. Changes take effect immediately.",
-              },
-              {
-                q: "What happens if I exceed my usage limits?",
-                a: "For Free plans, you'll need to wait until the next day. Pro users can purchase additional requests.",
-              },
-              {
-                q: "Is there a free trial for Pro plans?",
-                a: "Yes, we offer a 14-day free trial for all Pro features with no credit card required.",
-              },
-              {
-                q: "Do you offer student discounts?",
-                a: "Yes, we offer 50% off Pro plans for verified students and educators.",
-              },
-              {
-                q: "What payment methods do you accept?",
-                a: "We accept UPI payments for all plans. For enterprise plans, we also support bank transfers.",
-              },
-              {
-                q: "Can I cancel my subscription anytime?",
-                a: "Yes, you can cancel anytime. You'll retain access until the end of your billing period.",
-              },
-            ].map((faq, index) => (
+            {[/* FAQs Array */].map((faq, index) => (
               <Card key={index} className="glass-effect border-gray-700">
                 <CardContent className="p-6">
                   <h3 className="text-white font-semibold mb-3">{faq.q}</h3>
