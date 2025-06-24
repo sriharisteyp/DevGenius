@@ -30,7 +30,7 @@
     {
       "id": "pro",
       "name": "Pro",
-      "price": 1,
+      "price": 799,
       "priceId": "price_pro_monthly",
       "period": "per month",
       "description": "For professional developers and small teams",
@@ -116,6 +116,14 @@
       "password": "$2a$10$vfmkjtcbbP.7w8n4uSIcQejNAa4VLuxf6bXsA1NTg608o0qk0Dh0y",
       "createdAt": "2025-06-19T01:46:00.459Z",
       "updatedAt": "2025-06-19T01:46:00.459Z"
+    },
+    {
+      "id": "1750772804488",
+      "username": "aslam123",
+      "email": "nehefam325@exitbit.com",
+      "password": "$2a$10$vBnLZqzVUHyJnVX1KoCNs.5TmuqA1gXZfLcjWZMsmrGWy64YZX39G",
+      "createdAt": "2025-06-24T13:46:44.488Z",
+      "updatedAt": "2025-06-24T13:46:44.488Z"
     }
   ]
 }

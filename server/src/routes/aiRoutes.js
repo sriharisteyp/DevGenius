@@ -1,11 +1,11 @@
 import express from 'express';
 import fetch from 'node-fetch';
 import { checkMessageLimit } from '../middleware/messageLimit.js';
-import { verifyToken } from '../middleware/auth.js';
+import { authenticateToken } from '../middleware/auth.js';
 
 const router = express.Router();
 
-router.post('/generate', verifyToken, checkMessageLimit, async (req, res) => {
+router.post('/generate', authenticateToken, checkMessageLimit, async (req, res) => {
   try {
     const { contents, generationConfig } = req.body;
     

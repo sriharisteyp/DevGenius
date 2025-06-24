@@ -128,63 +128,8 @@ async function completePayment(userId, transactionId, planId) {
   db.subscriptions.push(subscription);
 
   // Save to database
-  await fs.writeFile(dbPath, JSON.stringify(db, null, 2));
-
-  return { transaction, subscription };
+  await fs.writeFile(dbPath, JSON.stringify(db, null, 2));  return { transaction, subscription };
 }
-
-// Function to save transaction and create subscription
-const completePayment = async (userId, transactionId, planId) => {
-  const data = await fs.readFile(dbPath, 'utf8');
-  const db = JSON.parse(data);
-
-  // Initialize arrays if they don't exist
-  if (!db.transactions) db.transactions = [];
-  if (!db.subscriptions) db.subscriptions = [];
-
-  // Find the plan
-  const plan = db.plans.find(p => p.id === planId);
-  if (!plan) throw new Error('Plan not found');
-
-  // Create transaction
-  const transaction = {
-    id: transactionId,
-    userId,
-    planId,
-    amount: plan.price,
-    status: 'completed',
-    createdAt: new Date().toISOString(),
-    completedAt: new Date().toISOString()
-  };
-  
-  // Create subscription
-  const subscription = {
-    id: Date.now().toString(),
-    userId,
-    planId,
-    transactionId,
-    status: 'active',
-    createdAt: new Date().toISOString(),
-    currentPeriodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
-  };
-
-  // Deactivate existing subscriptions for this user
-  db.subscriptions = db.subscriptions.map(s => 
-    s.userId === userId ? { ...s, status: 'inactive' } : s
-  );
-
-  // Add new records
-  db.transactions.push(transaction);
-  db.subscriptions.push(subscription);
-
-  // Save to database
-  await fs.writeFile(dbPath, JSON.stringify(db, null, 2));
-
-  return { transaction, subscription };
-};
-  
-  return subscription;
-};
 
 // Create a new UPI payment
 router.post('/upi/create', authenticateToken, async (req, res) => {
