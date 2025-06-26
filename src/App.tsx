@@ -3,7 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { StrictMode } from "react";
+import { StrictMode, useEffect } from "react";
 import { LoadingProvider } from "@/components/LoadingProvider";
 import { AuthProvider } from "@/components/AuthProvider";
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
@@ -24,6 +24,15 @@ import Footer from "@/components/Footer";
 const queryClient = new QueryClient();
 
 const App = () => {
+  useEffect(() => {
+    const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+    const lastReset = localStorage.getItem("lastCreditReset");
+    if (lastReset !== today) {
+      localStorage.setItem("credits", "0");
+      localStorage.setItem("lastCreditReset", today);
+    }
+  }, []);
+
   return (
     <StrictMode>
       <QueryClientProvider client={queryClient}>
