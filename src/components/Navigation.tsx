@@ -24,6 +24,7 @@ const Navigation = () => {
   const handleLogout = () => {
     localStorage.removeItem("user"); // Clear user info from storage
     setUser(null); // Reset user state
+    window.location.reload(); // Reload the website after logout
   };
 
   const navItems = [

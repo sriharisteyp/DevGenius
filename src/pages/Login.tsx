@@ -60,16 +60,6 @@ const Login = () => {
           </CardHeader>
 
           <CardContent className="space-y-6">
-            {/* Benefits Preview */}
-            <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4 mb-6">
-              <h3 className="text-green-400 font-semibold mb-2">✨ What You Get</h3>
-              <ul className="text-sm text-gray-300 space-y-1">
-                <li>• Secure API key storage & management</li>
-                <li>• Complete generation history</li>
-                <li>• Custom templates & presets</li>
-                <li>• Advanced AI model access</li>
-              </ul>
-            </div>
 
             {successMessage && (
               <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-3">
