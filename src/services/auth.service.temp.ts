@@ -21,7 +21,7 @@ interface RegisterCredentials {
 }
 
 class AuthService {
-    private baseUrl = 'https://dev-ai-backend.vercel.app/auth';
+    private baseUrl = 'https://node-dev-p852.onrender.com/auth';
 
     async login(credentials: LoginCredentials): Promise<AuthResponse> {
         if (!credentials.email?.trim() || !credentials.password?.trim()) {

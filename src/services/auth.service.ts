@@ -1,4 +1,4 @@
-const API_BASE_URL = import.meta.env.VITE_API_URL || "https://dev-ai-backend.vercel.app";
+const API_BASE_URL = import.meta.env.VITE_API_URL || "https://node-dev-p852.onrender.com";
 
 interface AuthResponse {
     message: string;

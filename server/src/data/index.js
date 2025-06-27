@@ -32,11 +32,7 @@ class DB {
             await fs.writeFile(dbPath, JSON.stringify(this.data, null, 2), 'utf8');
         } catch (error) {
             console.error('Database write error:', error);
-            // Log additional details for debugging
-            console.error('DB Path:', dbPath);
-            console.error('Current Data:', this.data);
-            console.error('Stack Trace:', error.stack);
-            throw new Error('Database write failed: ' + error.message);
+            throw new Error('Database write failed');
         }
     }
 
