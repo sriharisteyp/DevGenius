@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Mail, Send } from "lucide-react";
+import { Mail, Send, Star, ChevronDown, Info } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import emailjs from "@emailjs/browser";
@@ -16,28 +16,45 @@ const Contact = () => {
     subject: "",
     message: "",
   });
+  const [rating, setRating] = useState(0);
+  const [feedback, setFeedback] = useState("");
+  const [faqData] = useState([
+    {
+      question: "How can I contact support?",
+      answer: "You can use the form on this page or email us directly at support@example.com.",
+    },
+    {
+      question: "What is your response time?",
+      answer: "We typically respond within 24 hours.",
+    },
+    {
+      question: "Can I update my contact information later?",
+      answer: "Yes, please reach out to us with any updates to your information.",
+    },
+  ]);
+  const [expandedFAQ, setExpandedFAQ] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
   };
-  // Initialize EmailJS
+
   useEffect(() => {
     emailjs.init("Tmg7xJLUVmJkkKtNv"); // Replace with your EmailJS public key
   }, []);
 
-  const validateEmail = (email: string) => {
+  const validateEmail = (email) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(email);
   };
-  const handleSubmit = async (e: React.FormEvent) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-  
-    // Validate required fields
+
     if (!formData.firstName || !formData.lastName || !formData.email || !formData.message) {
       toast({
         title: "Error",
@@ -47,7 +64,6 @@ const Contact = () => {
       return;
     }
 
-    // Validate email format
     if (!validateEmail(formData.email)) {
       toast({
         title: "Error",
@@ -56,36 +72,25 @@ const Contact = () => {
       });
       return;
     }
-  
+
     setIsSubmitting(true);
-  
-    try {      const templateParams = {
+
+    try {
+      const templateParams = {
         name: `${formData.firstName} ${formData.lastName}`,
         email: formData.email,
         subject: formData.subject || "Contact Form Submission",
-        message: formData.message
+        message: formData.message,
       };
-  
-      const response = await emailjs.send(
-        "service_qgrnojs",
-        "template_ldqyx9s",
-        templateParams,
-        "Tmg7xJLUVmJkkKtNv"
-      );
-  
+
+      await emailjs.send("service_qgrnojs", "template_ldqyx9s", templateParams, "Tmg7xJLUVmJkkKtNv");
+
       toast({
         title: "Message Sent!",
         description: "Thank you for your message. We'll get back to you soon!",
       });
-  
-      // Clear form after successful submission
-      setFormData({
-        firstName: "",
-        lastName: "",
-        email: "",
-        subject: "",
-        message: "",
-      });
+
+      setFormData({ firstName: "", lastName: "", email: "", subject: "", message: "" });
     } catch (error) {
       console.error("Email sending error:", error);
       toast({
@@ -97,24 +102,31 @@ const Contact = () => {
       setIsSubmitting(false);
     }
   };
-  
-  
+
+  const handleFeedbackSubmit = () => {
+    if (!feedback) {
+      toast({
+        title: "Error",
+        description: "Please provide feedback before submitting.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    toast({
+      title: "Feedback Submitted!",
+      description: "Thank you for your feedback!",
+    });
+
+    setFeedback("");
+  };
 
   return (
     <div className="min-h-screen pt-16">
       <Navigation />
-      <div className="max-w-4xl mx-auto px-4 py-12">
-        <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            Get in <span className="gradient-text">Touch</span>
-          </h1>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            Have questions about our services? We'd love to hear from you. Send us a message and
-            we'll respond as soon as possible.
-          </p>
-        </div>
-
-        <div className="max-w-2xl mx-auto">
+      <div className="max-w-6xl mx-auto px-4 py-12 grid grid-cols-1 md:grid-cols-2 gap-8">
+        {/* Contact Form */}
+        <div>
           <Card className="glass-effect border-green-500/30">
             <CardHeader>
               <CardTitle className="text-white text-2xl flex items-center">
@@ -211,7 +223,92 @@ const Contact = () => {
             </CardContent>
           </Card>
         </div>
+
+        {/* Unified Right Section */}
+        <div>
+          <Card className="glass-effect border-blue-500/30">
+            <CardHeader>
+              <CardTitle className="text-white text-2xl flex items-center">
+                <Info className="mr-3 text-blue-400" size={28} />
+                Contact
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              {/* About Section */}
+              <div className="mb-6">
+                <h3 className="text-white text-xl font-semibold">About Us</h3>
+                <p className="text-gray-300">
+                  We are dedicated to providing excellent service and support. Whether you need
+                  help with our services or have questions about your project, we are here for you.
+                </p>
+              </div>
+
+              {/* Manual Contact Email */}
+              <div className="mb-6">
+                <h3 className="text-white text-xl font-semibold">Contact Us Manually</h3>
+                <p className="text-green-400 text-lg">Email: support@example.com</p>
+              </div>
+
+              {/* Rating Section */}
+              <div className="mb-6">
+                <h3 className="text-white text-xl font-semibold">Rate Us</h3>
+                <div className="flex space-x-2">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <Star
+                      key={star}
+                      className={`cursor-pointer ${star <= rating ? "text-yellow-400" : "text-gray-400"}`}
+                      size={32}
+                      onClick={() => setRating(star)}
+                    />
+                  ))}
+                </div>
+                <div className="mt-4">
+                  <Textarea
+                    value={feedback}
+                    onChange={(e) => setFeedback(e.target.value)}
+                    placeholder="Share your feedback..."
+                    className="glass-effect border-gray-600 text-white placeholder-gray-400 min-h-[100px] max-h-[100px]"
+                  />
+                  <Button
+                    onClick={handleFeedbackSubmit}
+                    className="mt-5 bg-blue-600 hover:bg-blue-700 text-white w-full py-2 "
+                  >
+                    Submit Feedback
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </div>
+
+      {/* FAQ Section 
+      <div className="max-w-6xl mx-auto px-4 py-12">
+        <Card className="glass-effect border-gray-500/30">
+          <CardHeader>
+            <CardTitle className="text-white text-2xl flex items-center">FAQs</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {faqData.map((faq, index) => (
+                <div key={index} className="border-b border-gray-600 pb-4">
+                  <button
+                    className="w-full text-left text-white font-medium flex justify-between items-center"
+                    onClick={() => setExpandedFAQ(expandedFAQ === index ? null : index)}
+                  >
+                    {faq.question}
+                    <ChevronDown
+                      className={`transition-transform ${expandedFAQ === index ? "rotate-180" : "rotate-0"}`}
+                      size={20}
+                    />
+                  </button>
+                  {expandedFAQ === index && <p className="text-gray-300 mt-2">{faq.answer}</p>}
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </div>*/}
     </div>
   );
 };
