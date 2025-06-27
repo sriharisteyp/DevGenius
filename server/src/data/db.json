@@ -124,6 +124,22 @@
       "password": "$2a$10$vBnLZqzVUHyJnVX1KoCNs.5TmuqA1gXZfLcjWZMsmrGWy64YZX39G",
       "createdAt": "2025-06-24T13:46:44.488Z",
       "updatedAt": "2025-06-24T13:46:44.488Z"
+    },
+    {
+      "id": "1750987814552",
+      "username": "hello",
+      "email": "email@exmapl.com",
+      "password": "$2a$10$JWI0yvaZ4Xpbphc4VSQdg.Xy6i3XJB7IU8/V2snhytXoZaqQdZMzi",
+      "createdAt": "2025-06-27T01:30:14.552Z",
+      "updatedAt": "2025-06-27T01:30:14.552Z"
+    },
+    {
+      "id": "1750988348160",
+      "username": "hello1",
+      "email": "email@exmapl.com1",
+      "password": "$2a$10$ymtmz9xtqsf.N2NB/j/cq.0GIo.cd0oiH1aWc.V2RiRmGT2ongfBi",
+      "createdAt": "2025-06-27T01:39:08.160Z",
+      "updatedAt": "2025-06-27T01:39:08.160Z"
     }
   ]
 }

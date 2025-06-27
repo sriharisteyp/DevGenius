@@ -48,7 +48,7 @@ export default function Register() {
     try {
       setLoading(true);
       await signUp(formData.username, formData.email, formData.password);
-      navigate('/login', { state: { message: 'Registration successful! Please log in.' } });
+      navigate('/ai-tools', { state: { message: 'Registration successful! Please log in.' } });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Registration failed');
     } finally {
@@ -71,16 +71,6 @@ export default function Register() {
           </CardHeader>
 
           <CardContent className="space-y-6">
-            {/* Benefits Preview */}
-            <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4 mb-6">
-              <h3 className="text-green-400 font-semibold mb-2">✨ What You'll Get</h3>
-              <ul className="text-sm text-gray-300 space-y-1">
-                <li>• Secure API key storage & management</li>
-                <li>• Complete generation history</li>
-                <li>• Custom templates & presets</li>
-                <li>• Advanced AI model access</li>
-              </ul>
-            </div>
 
             {error && (
               <Alert variant="destructive">
@@ -89,13 +79,14 @@ export default function Register() {
             )}
 
             <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label className="text-white text-sm font-medium mb-2 block">Username</label>
+
+            <div>
+                <label className="text-white text-sm font-medium mb-2 block">Email</label>
                 <Input
-                  name="username"
-                  type="text"
-                  placeholder="Choose a username"
-                  value={formData.username}
+                  name="email"
+                  type="email"
+                  placeholder="Enter your email"
+                  value={formData.email}
                   onChange={handleChange}
                   className="glass-effect border-gray-600 text-white placeholder-gray-400"
                   required
@@ -103,12 +94,12 @@ export default function Register() {
               </div>
 
               <div>
-                <label className="text-white text-sm font-medium mb-2 block">Email</label>
+                <label className="text-white text-sm font-medium mb-2 block">Username</label>
                 <Input
-                  name="email"
-                  type="email"
-                  placeholder="Enter your email"
-                  value={formData.email}
+                  name="username"
+                  type="text"
+                  placeholder="Choose a username"
+                  value={formData.username}
                   onChange={handleChange}
                   className="glass-effect border-gray-600 text-white placeholder-gray-400"
                   required
