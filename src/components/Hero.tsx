@@ -1,10 +1,14 @@
-
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
+import React from "react";
 
-const Hero = () => {
+interface HeroProps {
+  onExploreClick?: () => void;
+}
+
+const Hero: React.FC<HeroProps> = ({ onExploreClick }) => {
   return (
     <section className="relative min-h-screen flex items-center justify-center px-4 overflow-hidden">
       {/* Animated background elements */}
@@ -41,27 +45,22 @@ const Hero = () => {
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
           <Link to="/ai-tools">
-          <Button 
-            size="lg" 
-            className="bg-green-600 hover:bg-green-700 text-white px-8 py-4 text-lg font-semibold rounded-xl glow-effect animate-pulse-glow group"
-          >
-            Start Building with AI
-            <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-          </Button>
-          </Link>
-          
-          <Link to="#AIToolsShowcase" onClick={()=>{
-            
-          }}>
             <Button 
-            variant="outline" 
+              size="lg" 
+              className="bg-green-600 hover:bg-green-700 text-white px-8 py-4 text-lg font-semibold rounded-xl glow-effect animate-pulse-glow group"
+            >
+              Start Building with AI
+              <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+            </Button>
+          </Link>
+          <Button
+            variant="outline"
             size="lg"
             className="glass-effect border-gray-600 hover:border-green-500 text-white px-8 py-4 text-lg font-semibold rounded-xl"
+            onClick={onExploreClick}
           >
             Explore AI Tools
           </Button>
-          </Link>
-          
         </div>
 
         {/* Feature Preview */}
