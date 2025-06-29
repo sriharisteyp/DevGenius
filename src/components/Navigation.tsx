@@ -116,73 +116,77 @@ const Navigation = () => {
         </div>
 
         {/* Mobile Navigation */}
-        {isOpen && (
-          <div className="md:hidden py-4 space-y-2">
-            {navItems.map((item) => (
-              <Link
-                key={item.path}
-                to={item.path}
-                className={`block px-4 py-2 text-sm font-medium transition-colors ${
-                  isActive(item.path)
-                    ? "text-green-400"
-                    : "text-gray-300 hover:text-green-400"
-                }`}
-                onClick={() => setIsOpen(false)}
-              >
-                {item.label}
-              </Link>
-            ))}
-            <div className="px-4 pt-2 space-y-2">
-              {user ? (
-                <>
-                  <span className="block text-sm text-white">
-                    Welcome, {user.name}
-                  </span>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="glass-effect border-gray-600 hover:border-green-500 text-white w-full"
-                    onClick={() => {
-                      handleLogout();
-                      setIsOpen(false);
-                    }}
-                  >
-                    Logout
-                  </Button>
-                </>
-              ) : (
-                <>
-                  <Link
-                    to="/login"
-                    state={{ isLogin: true }}
-                    onClick={() => setIsOpen(false)}
-                  >
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="glass-effect border-gray-600 hover:border-green-500 text-white w-full"
-                    >
-                      Sign In
-                    </Button>
-                  </Link>
-                  <Link
-                    to="/register"
-                    state={{ isLogin: false }}
-                    onClick={() => setIsOpen(false)}
-                  >
-                    <Button
-                      variant="default"
-                      size="sm"
-                      className="bg-green-600 hover:bg-green-700 text-white w-full"
-                    >
-                      Sign Up
-                    </Button>
-                  </Link>
-                </>
-              )}
-            </div>
-          </div>
-        )}
+{isOpen && (
+  <div
+    className="md:hidden py-4 space-y-2 bg-[#232C3D] bg-opacity-100"
+     // Optional: adds a blur effect
+  >
+    {navItems.map((item) => (
+      <Link
+        key={item.path}
+        to={item.path}
+        className={`block px-4 py-2 text-sm font-medium transition-colors ${
+          isActive(item.path)
+            ? "text-green-400"
+            : "text-gray-300 hover:text-green-400"
+        }`}
+        onClick={() => setIsOpen(false)}
+      >
+        {item.label}
+      </Link>
+    ))}
+    <div className="px-4 pt-2 space-y-2">
+      {user ? (
+        <>
+          <span className="block text-sm text-white">
+            Welcome, {user.username}
+          </span>
+          <Button
+            variant="outline"
+            size="sm"
+            className="glass-effect border-gray-600 hover:border-green-500 text-white w-full"
+            onClick={() => {
+              handleLogout();
+              setIsOpen(false);
+            }}
+          >
+            Logout
+          </Button>
+        </>
+      ) : (
+        <>
+          <Link
+            to="/login"
+            state={{ isLogin: true }}
+            onClick={() => setIsOpen(false)}
+          >
+            <Button
+              variant="outline"
+              size="sm"
+              className="glass-effect border-gray-600 hover:border-green-500 text-white w-full mb-[10px]"
+            >
+              Sign In
+            </Button>
+          </Link>
+          <Link
+            to="/register"
+            state={{ isLogin: false }}
+            onClick={() => setIsOpen(false)}
+          >
+            <Button
+              variant="default"
+              size="sm"
+              className="bg-green-600 hover:bg-green-700 text-white w-full"
+            >
+              Sign Up
+            </Button>
+          </Link>
+        </>
+      )}
+    </div>
+  </div>
+)}
+
       </div>
     </nav>
   );
