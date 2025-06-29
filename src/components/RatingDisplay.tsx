@@ -7,7 +7,7 @@ const RatingDisplay: React.FC = () => {
   useEffect(() => {
     const fetchAverageRating = async () => {
       try {
-        const response = await fetch("http://localhost:3000/api/ratings/average");
+        const response = await fetch("https://devgenius-backend.onrender.com/api/ratings/average");
         if (!response.ok) throw new Error("Failed to fetch");
         const data = await response.json();
         setAverage(data.average);

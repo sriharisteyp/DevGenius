@@ -53,7 +53,7 @@ const Contact = () => {
   useEffect(() => {
     // Check if user has already rated
     if (isAuthenticated && user) {
-      fetch("http://localhost:3000/api/ratings/user", {
+      fetch("https://devgenius-backend.onrender.com/api/ratings/user", {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       })
         .then((res) => res.json())
@@ -159,7 +159,7 @@ const Contact = () => {
     }
     setRating(star);
     try {
-      await fetch("http://localhost:3000/api/ratings", {
+      await fetch("https://devgenius-backend.onrender.com/api/ratings", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -1,6 +1,6 @@
 // Use window.location.origin in development if VITE_API_URL is not set
 const API_BASE_URL = import.meta.env.VITE_API_URL || (
-    import.meta.env.MODE === 'development' ? 'https://node-dev-p852.onrender.com' : window.location.origin
+    import.meta.env.MODE === 'development' ? 'https://devgenius-backend.onrender.com' : window.location.origin
 );
 
 export interface Plan {
