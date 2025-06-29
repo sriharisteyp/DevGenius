@@ -14,7 +14,7 @@ const Footer = () => {
             </div>
             <p className="text-gray-400 text-sm">
               Empowering developers with AI-driven tools for smarter, faster coding.
-            </p>
+            </p>{/* 
             <div className="flex space-x-4">
               <a href="#" className="text-gray-400 hover:text-green-400 transition-colors">
                 <Github className="w-5 h-5" />
@@ -28,7 +28,7 @@ const Footer = () => {
               <a href="#" className="text-gray-400 hover:text-green-400 transition-colors">
                 <Mail className="w-5 h-5" />
               </a>
-            </div>
+            </div> */}
           </div>
 
           {/* Tools */}

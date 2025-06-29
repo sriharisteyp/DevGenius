@@ -20,7 +20,7 @@ const Hero: React.FC<HeroProps> = ({ onExploreClick }) => {
 
       <div className="relative z-10 max-w-6xl mx-auto text-center">
         {/* Badge */}
-        <div className="mb-8 animate-float pt-[75px]">
+        <div className="mb-8 animate-float pt-[100px]">
           <Badge variant="secondary" className="glass-effect px-4 py-2 text-sm font-medium">
             🚀 Now in Beta - Join Early Access
           </Badge>

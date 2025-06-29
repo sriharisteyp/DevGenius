@@ -117,7 +117,7 @@ export default function Register() {
                   className="glass-effect border-gray-600 text-white placeholder-gray-400"
                   required
                 />
-                <p className="text-xs text-gray-400 mt-1">Must be at least 6 characters long</p>
+                <p className="text-xs text-gray-400 mt-1">Must be at least 8 characters long</p>
               </div>
 
               <div>

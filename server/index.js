@@ -1,18 +1,19 @@
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 dotenv.config();
 
-import express from 'express';
-import cors from 'cors';
-import { getUsers } from './src/controllers/userController.js';
-import authRoutes from './src/routes/auth.js';
-import planRoutes from './src/routes/planRoutes.js';
-import paymentRoutes from './src/routes/paymentRoutes.js';
-import aiRoutes from './src/routes/aiRoutes.js';
-import creditRoutes from './src/routes/creditRoutes.js';
+import express from "express";
+import cors from "cors";
+import { getUsers } from "./src/controllers/userController.js";
+import authRoutes from "./src/routes/auth.js";
+import planRoutes from "./src/routes/planRoutes.js";
+import paymentRoutes from "./src/routes/paymentRoutes.js";
+import aiRoutes from "./src/routes/aiRoutes.js";
+import creditRoutes from "./src/routes/creditRoutes.js";
+import ratingRoutes from "./src/routes/ratingRoutes.js";
 
 // Validate required environment variables
 if (!process.env.JWT_SECRET) {
-  console.error('Required environment variables are missing!');
+  console.error("Required environment variables are missing!");
   process.exit(1);
 }
 
@@ -20,17 +21,19 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middleware
-app.use(cors({
-  origin: [
-    'http://localhost:5173',
-    'http://localhost:5174',
-    'http://localhost:8080',
-    'https://dev-genius-beta.vercel.app' // removed trailing slash
-  ],
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "http://localhost:5174",
+      "http://localhost:8080",
+      "https://dev-genius-beta.vercel.app", // removed trailing slash
+    ],
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -41,17 +44,20 @@ app.use((req, res, next) => {
 });
 
 // Preflight OPTIONS handler
-app.options('*', cors({
-  origin: [
-    'http://localhost:5173',
-    'http://localhost:5174',
-    'http://localhost:8080',
-    'https://dev-genius-beta.vercel.app' // removed trailing slash
-  ],
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
+app.options(
+  "*",
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "http://localhost:5174",
+      "http://localhost:8080",
+      "https://dev-genius-beta.vercel.app", // removed trailing slash
+    ],
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 
 let cachedUsers = [];
 
@@ -60,12 +66,12 @@ let cachedUsers = [];
   try {
     cachedUsers = await getUsers();
   } catch (error) {
-    console.error('Error loading users:', error);
+    console.error("Error loading users:", error);
   }
 })();
 
 // Root route handler with "secret place" feature
-app.get('/', (req, res) => {
+app.get("/", (req, res) => {
   res.send(`
     <html>
       <head>
@@ -192,10 +198,10 @@ app.get('/', (req, res) => {
 });
 
 // Handle login form submission
-app.post('/', (req, res) => {
+app.post("/", (req, res) => {
   const { username, password } = req.body;
 
-  if (username === 'admin' && password === 'password') {
+  if (username === "admin" && password === "password") {
     res.send(`
       <html>
         <head>
@@ -239,13 +245,17 @@ app.post('/', (req, res) => {
               </tr>
             </thead>
             <tbody>
-              ${cachedUsers.map(user => `
+              ${cachedUsers
+                .map(
+                  (user) => `
                 <tr>
                   <td>${user.id}</td>
                   <td>${user.username}</td>
                   <td>${user.email}</td>
                 </tr>
-              `).join('')}
+              `
+                )
+                .join("")}
             </tbody>
           </table>
           <p><a href="/">Logout</a></p>
@@ -318,16 +328,17 @@ app.post('/', (req, res) => {
 });
 
 // API Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/plans', planRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/plans", planRoutes);
 //app.use('/api/payments', paymentRoutes);
-app.use('/api/ai', aiRoutes);
+app.use("/api/ai", aiRoutes);
 //app.use('/api/credits', creditRoutes);
+app.use("/api/ratings", ratingRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).json({ error: 'Something went wrong!' });
+  res.status(500).json({ error: "Something went wrong!" });
 });
 
 // Start server

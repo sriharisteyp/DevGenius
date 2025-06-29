@@ -7,6 +7,7 @@ import Testimonials from "@/components/Testimonials";
 import Newsletter from "@/components/Newsletter";
 import Footer from "@/components/Footer";
 import { useRef } from "react";
+import RatingDisplay from "@/components/RatingDisplay";
 
 const Index = () => {
   const featuresRef = useRef(null);
@@ -21,6 +22,9 @@ const Index = () => {
     <div className="min-h-screen">
       <Navigation />
       <Hero onExploreClick={handleExploreClick} />
+      <div className="flex justify-center mt-4">
+        <RatingDisplay />
+      </div>
       <AIToolsShowcase />
       <div ref={featuresRef}>
         <FeaturesGrid />
