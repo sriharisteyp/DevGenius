@@ -21,7 +21,7 @@ interface RegisterCredentials {
 }
 
 class AuthService {
-    private baseUrl = 'https://devgenius-backend.onrender.com //auth';
+    private baseUrl = 'https://devgenius-backend.onrender.com/auth';
 
     async login(credentials: LoginCredentials): Promise<AuthResponse> {
         if (!credentials.email?.trim() || !credentials.password?.trim()) {

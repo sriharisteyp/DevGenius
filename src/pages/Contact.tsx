@@ -9,7 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import emailjs from "@emailjs/browser";
 import { useAuth } from "@/hooks/useAuth";
 
-const API_URL = "https://devgenius-backend.onrender.com /api/ratings";
+const API_URL = "https://devgenius-backend.onrender.com/api/ratings";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
