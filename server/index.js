@@ -332,7 +332,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/plans", planRoutes);
 //app.use('/api/payments', paymentRoutes);
 app.use("/api/ai", aiRoutes);
-//app.use('/api/credits', creditRoutes);
+app.use("/api/credits", creditRoutes);
 app.use("/api/ratings", ratingRoutes);
 
 // Error handling middleware
