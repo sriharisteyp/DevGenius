@@ -1,9 +1,27 @@
 {
   "ratings": [
-    {"rating": 5, "userId": "1"},
-    {"rating": 4, "userId": "2"},
-    {"rating": 5, "userId": "3"},
-    {"rating": 4, "userId": "4"},
-    {"rating": 5, "userId": "5"}
+    {
+      "rating": 5,
+      "userId": "1"
+    },
+    {
+      "rating": 4,
+      "userId": "2"
+    },
+    {
+      "rating": 5,
+      "userId": "3"
+    },
+    {
+      "rating": 4,
+      "userId": "4"
+    },
+    {
+      "rating": 5,
+      "userId": "5"
+    },
+    5,
+    5,
+    5
   ]
 }

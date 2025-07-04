@@ -20,8 +20,8 @@ const RatingDisplay: React.FC = () => {
   const fetchRatings = async () => {
     try {
       const [averageRes, userRatingRes] = await Promise.all([
-        fetch("https://devgenius-backend.onrender.com/api/ratings/average"),
-        user ? fetch("https://devgenius-backend.onrender.com/api/ratings/user", {
+        fetch("https://devgenius-backend.onrender.com //api/ratings/average"),
+        user ? fetch("https://devgenius-backend.onrender.com //api/ratings/user", {
           headers: {
             'Authorization': `Bearer ${user.token}`
           }
@@ -60,7 +60,7 @@ const RatingDisplay: React.FC = () => {
     }
 
     try {
-      const response = await fetch("https://devgenius-backend.onrender.com/api/ratings", {
+      const response = await fetch("https://devgenius-backend.onrender.com //api/ratings", {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',

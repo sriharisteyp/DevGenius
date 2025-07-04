@@ -1,4 +1,4 @@
-const API_BASE_URL = import.meta.env.VITE_API_URL || "https://devgenius-backend.onrender.com";
+const API_BASE_URL = import.meta.env.VITE_API_URL || "https://devgenius-backend.onrender.com /";
 
 interface AuthResponse {
     message: string;

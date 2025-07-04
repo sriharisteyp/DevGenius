@@ -9,6 +9,8 @@ import { useToast } from "@/hooks/use-toast";
 import emailjs from "@emailjs/browser";
 import { useAuth } from "@/hooks/useAuth";
 
+const API_URL = "https://devgenius-backend.onrender.com /api/ratings";
+
 const Contact = () => {
   const [formData, setFormData] = useState({
     firstName: "",
@@ -21,6 +23,7 @@ const Contact = () => {
   const [feedback, setFeedback] = useState("");
   const [expandedFAQ, setExpandedFAQ] = useState(null); // Manage expanded FAQ state
   const [hasRated, setHasRated] = useState(false);
+  const [average, setAverage] = useState<number | null>(null);
   const faqData = [
     {
       question: "How can I contact support?",
@@ -47,24 +50,23 @@ const Contact = () => {
   };
 
   useEffect(() => {
-    emailjs.init("Tmg7xJLUVmJkkKtNv"); // Replace with your EmailJS public key
+    emailjs.init("Tmg7xJLUVmJkkKtNv");
   }, []);
 
   useEffect(() => {
-    // Check if user has already rated
-    if (isAuthenticated && user) {
-      fetch("https://devgenius-backend.onrender.com/api/ratings/user", {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.rating) {
-            setHasRated(true);
-            setRating(data.rating.rating);
-          }
-        });
-    }
-  }, [isAuthenticated, user]);
+    // Fetch average rating
+    const fetchAverage = async () => {
+      try {
+        const res = await fetch(`${API_URL}/average`);
+        if (!res.ok) throw new Error();
+        const data = await res.json();
+        setAverage(data.average);
+      } catch {
+        setAverage(null);
+      }
+    };
+    fetchAverage();
+  }, [hasRated]);
 
   const validateEmail = (email: string) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -141,29 +143,12 @@ const Contact = () => {
   };
 
   const handleRating = async (star: number) => {
-    if (!isAuthenticated) {
-      toast({
-        title: "Login Required",
-        description: "You must be logged in to rate.",
-        variant: "destructive",
-      });
-      return;
-    }
-    if (hasRated) {
-      toast({
-        title: "Already Rated",
-        description: "You have already submitted a rating.",
-        variant: "destructive",
-      });
-      return;
-    }
     setRating(star);
     try {
-      await fetch("https://devgenius-backend.onrender.com/api/ratings", {
+      await fetch(API_URL, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "application/json"
         },
         body: JSON.stringify({ rating: star }),
       });
@@ -171,8 +156,9 @@ const Contact = () => {
       toast({
         title: "Thank you!",
         description: "Your rating has been submitted.",
+        variant: "success",
       });
-    } catch (err) {
+    } catch {
       toast({
         title: "Error",
         description: "Failed to submit rating.",
@@ -207,7 +193,7 @@ const Contact = () => {
                   className="glass-effect border-gray-600 text-white placeholder-gray-400"
                   required
                   disabled={isSubmitting}
-                />
+                />  
               </div>
               <div>
                 <label className="text-white text-sm font-medium mb-2 block">Last Name *</label>
@@ -316,6 +302,11 @@ const Contact = () => {
                 />
               ))}
             </div>
+            {average !== null && (
+              <div className="text-yellow-300 mt-2 font-semibold">
+                Average Rating: {average.toFixed(1)} / 5
+              </div>
+            )}
             {hasRated && (
               <div className="text-green-400 mt-2 font-semibold">
                 You have already rated. Thank you for your feedback!

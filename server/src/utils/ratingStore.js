@@ -22,25 +22,18 @@ function getRatings() {
   }
 }
 
-// Accepts: { rating, userId }
-function addRating(rating, userId) {
+// Accepts: rating (number)
+function addRating(rating) {
   const ratings = getRatings();
-  // Only allow one rating per user
-  if (ratings.some((r) => r.userId === userId)) return false;
-  ratings.push({ rating, userId });
+  ratings.push(rating);
   fs.writeFileSync(ratingsFile, JSON.stringify({ ratings }, null, 2));
   return true;
-}
-
-function getUserRating(userId) {
-  const ratings = getRatings();
-  return ratings.find((r) => r.userId === userId);
 }
 
 function getAverageRating() {
   const ratings = getRatings();
   if (!ratings.length) return 0;
-  return ratings.reduce((a, b) => a + b.rating, 0) / ratings.length;
+  return ratings.reduce((a, b) => a + b, 0) / ratings.length;
 }
 
-export { getRatings, addRating, getAverageRating, getUserRating };
+export { getRatings, addRating, getAverageRating };

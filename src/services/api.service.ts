@@ -15,11 +15,11 @@ interface LoginPayload {
     password: string;
 }
 
-const API_BASE_URL = 'https://devgenius-backend.onrender.com';
+const API_BASE_URL = 'https://devgenius-backend.onrender.com /';
 
 export const apiService = {
     register: async (payload: RegisterPayload) => {
-        const response = await fetch(`https://devgenius-backend.onrender.com/api/auth/register`, {
+        const response = await fetch(`https://devgenius-backend.onrender.com //api/auth/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -35,7 +35,7 @@ export const apiService = {
     },
 
     login: async (payload: LoginPayload) => {
-        const response = await fetch(`https://devgenius-backend.onrender.com/api/auth/login`, {
+        const response = await fetch(`https://devgenius-backend.onrender.com //api/auth/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
